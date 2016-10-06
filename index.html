@@ -4,22 +4,10 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+		<title>Vital Outdoors Schedule Calendarer</title>
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" >
 		<link rel="stylesheet" href="bootstrap.min.css">
 		<link rel="stylesheet" href="style.css">
-		<title>Vital Outdoors Schedule Calendarer</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.js"></script>
-		<script src="/js/app.js"></script>
-		<script src="/js/googFactory.js"></script>
-		<script src="/js/vitalCtrl.js"></script>
-		<script type="text/javascript">
-			function checkAuthentication() {
-				if (window.initializeGoogleApi) {
-					window.initializeGoogleApi();
-				}
-			}
-		</script>
-		<script src="https://apis.google.com/js/client.js?onload=checkAuthentication"></script>
 	</head>
 	<body>
 		<div ng-app="app" ng-controller="vitalCtrl as vm">
@@ -50,7 +38,7 @@
 			</nav>
 
 
-			<div class="container" style="">
+			<div class="container" ng-cloak>
 				<h1>
 					Vital Schedule Calendar
 				</h1>
@@ -60,6 +48,10 @@
 				<p ng-show="vm.SignedIn">
 					Copy and paste your schedule into the text box to get started.
 				</p>
+				<div class="alert alert-danger" ng-show="vm.Error">
+					<a href="#" class="close" ng-click="vm.Error = null">&times;</a>
+					{{ vm.Error }}
+				</div>
 				<div class="alert alert-success" ng-show="vm.Finished">
 					<a href="#" class="close" ng-click="vm.Finished = false">&times;</a>
 					Done! Your schedule should now be on your Google calendar.
@@ -78,13 +70,13 @@
 								<form class="form-inline">
 									<div class="form-group">
 										<label for="exampleInput">Month</label>
-										<select class="form-control" ng-model="vm.Month">
+										<select class="form-control" ng-model="vm.Month" ng-change="vm.UpdateEventsList()">
 											<option ng-repeat="month in vm.Months" value="{{ month.value }}">{{ month.name }}</option>
 										</select>
 									</div>
 									<div class="form-group">
 										<label for="exampleInput">Year</label>
-										<select class="form-control" ng-model="vm.Year">
+										<select class="form-control" ng-model="vm.Year" ng-change="vm.UpdateEventsList()">
 											<option ng-repeat="year in vm.Years" value="{{ year }}">{{ year }}</option>
 										</select>
 									</div>
@@ -92,7 +84,7 @@
 
 								<form>
 									<div class="form-group" style="margin-top: 10px;">
-											<input type="text" class="form-control" placeholder="Event Title" ng-model="vm.EventTitle">
+											<input type="text" class="form-control" placeholder="Event Title" ng-model="vm.EventTitle" ng-change="vm.UpdateEventTitle()">
 									</div>
 									<div class="form-group">
 										<textarea class="form-control"
@@ -118,7 +110,7 @@
 										</li>
 									</ul>
 									<strong>
-										{{ vm.Events.length }} days total
+										{{ vm.Events.length }} day{{ vm.Events.length > 1 ? 's' : '' }} total
 									</strong>
 								</div>
 							</div>
@@ -129,5 +121,18 @@
 			</div>
 
 		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.js"></script>
+		<script src="/js/app.js"></script>
+		<script src="/js/googFactory.js"></script>
+		<script src="/js/vitalCtrl.js"></script>
+		<script type="text/javascript">
+			function checkAuthentication() {
+				if (window.initializeGoogleApi) {
+					window.initializeGoogleApi();
+				}
+			}
+		</script>
+		<script src="https://apis.google.com/js/client.js?onload=checkAuthentication"></script>
 	</body>
 </html>

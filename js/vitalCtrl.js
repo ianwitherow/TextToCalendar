@@ -10,8 +10,12 @@ function vitalCtrl(googFactory, $timeout) {
 	vm.Month = moment().format('MM');
 	vm.Year = moment().format('YYYY');
 	vm.Finished = false;
-	vm.EventTitle = "Work at Vital Outdoors";
+	vm.EventTitle = localStorage.getItem("eventTitle") || "Work at Vital Outdoors";
+		
 	vm.AddingEvents = false;
+
+	var monthAndYearRegex = /(January|February|March|April|May|June|July|August|September|October|November|December)\s(\d{4})/gm;
+	var timeRegex = /^(\d{1,2}:\d{2} [A|P|a|p][M|m])-(\d{1,2}:\d{2} [A|P|a|p][M|m])/m;
 
 	vm.Months = [];
 	// Populate months
@@ -50,7 +54,12 @@ function vitalCtrl(googFactory, $timeout) {
 	vm.UpdateEventsList = function() {
 		vm.Events = [];
 		// Parse the ScheduleText to get the days and times
-		var timeRegex = /^(\d{1,2}:\d{2} [A|P]M)-(\d{1,2}:\d{2} [A|P]M)/m;
+		// See if the month and year were in the pasted text; if so, set the dropdowns to those values
+		var monthYearMatches = monthAndYearRegex.exec(vm.ScheduleText);
+		if (monthYearMatches != null && monthYearMatches.length > 1) {
+			vm.Month = (moment.months().indexOf(monthYearMatches[1].trim()) + 1).toString()
+			vm.Year = monthYearMatches[2].trim();
+		}
 
 		// Loop through each line of text
 		var lines = vm.ScheduleText.split('\n');
@@ -64,12 +73,15 @@ function vitalCtrl(googFactory, $timeout) {
 				if (i - 2 >= 0) {
 					// Two lines up is still actually a line
 					var dayNumber = lines[i - 2];
-					var event = {
-						date: vm.Month + '/' + dayNumber + '/' + vm.Year,
-						start: start,
-						end: end
+					if (dayNumber.length > 0 && dayNumber.length <= 2 && !isNaN(dayNumber) && +dayNumber <= 31) {
+						// Day should be valid; one or two digits long and less than 32
+						var event = {
+							date: vm.Month + '/' + dayNumber + '/' + vm.Year,
+							start: start,
+							end: end
+						}
+						vm.Events.push(event);
 					}
-					vm.Events.push(event);
 				}
 			}
 		}
@@ -77,6 +89,13 @@ function vitalCtrl(googFactory, $timeout) {
 
 	vm.AddEventsToCalendar = function() {
 		if (vm.AddingEvents) {
+			return;
+		}
+		// Make sure required fields are good
+		// TODO: validate start and end dates on events
+		// TODO: show error message if any api calls fail
+		if (vm.EventTitle.length === 0 || vm.Month === 0 || vm.Month.length === 0 || vm.Year.length === 0) {
+			vm.Error = "Something's wrong - make sure the month and year are selected, and that there's an Event Title.";
 			return;
 		}
 		vm.AddingEvents = true;
@@ -110,6 +129,10 @@ function vitalCtrl(googFactory, $timeout) {
 				}
 			});
 		});
+	}
+
+	vm.UpdateEventTitle = function() {
+		localStorage.setItem("eventTitle", vm.EventTitle);
 	}
 
 	vm.CreateTestEvent = function() {

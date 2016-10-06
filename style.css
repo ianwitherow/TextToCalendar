@@ -15,3 +15,7 @@ nav .brand-logo {
 	margin-bottom: 20px;
 
 }
+
+[ng-cloak] {
+	 display: none;
+}
