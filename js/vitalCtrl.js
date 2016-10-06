@@ -17,29 +17,18 @@ function vitalCtrl(googFactory, $timeout) {
 	var monthAndYearRegex = /(January|February|March|April|May|June|July|August|September|October|November|December)\s(\d{4})/gm;
 	var timeRegex = /^(\d{1,2}:\d{2} [A|P|a|p][M|m])-(\d{1,2}:\d{2} [A|P|a|p][M|m])/m;
 
-	vm.Months = [];
 	// Populate months
-	 (function() {
-		var d = moment().startOf('year');
-		var months = [];
-		for (var i = 0; i < 12; i++) {
-			var monthValue = d.format('MM')
-			vm.Months.push({ value: d.format('MM'), name: d.format('MMMM') })
-			d.add(1, 'months');
-		}
-	})();
+	vm.Months = moment.months().map(function(name, index) {
+		return { value: index, name: name };
+	});
 
-	vm.Years = [];
 	// Populate years
-	(function() {
-		// Just return the current year and the next
-		var now = moment();
-		vm.Years = [
-			now.format('YYYY'),
-			now.add(1, 'years').format('YYYY')
-		]
-	})();
+	vm.Years = [
+		moment().format('YYYY'),
+		moment().add(1, 'years').format('YYYY')
+	];
 
+	// Update scope variables when the factory values change
 	var updateScope = function() {
 		$timeout(function() {
 			vm.AuthChecked = googFactory.state.AuthChecked;
@@ -47,10 +36,11 @@ function vitalCtrl(googFactory, $timeout) {
 		});
 	}
 
+	// Expose some factory functions to the view
 	vm.SignIn = googFactory.SignIn;
 	vm.SignOut = googFactory.SignOut;
-	vm.CreateEvent = googFactory.CreateEvent;
 
+	// Create the array of events based on what was pasted into the textarea
 	vm.UpdateEventsList = function() {
 		vm.Events = [];
 		// Parse the ScheduleText to get the days and times
@@ -87,6 +77,7 @@ function vitalCtrl(googFactory, $timeout) {
 		}
 	}
 
+	// Adds our list of events to the Google calendar
 	vm.AddEventsToCalendar = function() {
 		if (vm.AddingEvents) {
 			return;
@@ -131,29 +122,11 @@ function vitalCtrl(googFactory, $timeout) {
 		});
 	}
 
+	// Save the event title to localStorage so we can load it up next time
 	vm.UpdateEventTitle = function() {
 		localStorage.setItem("eventTitle", vm.EventTitle);
 	}
 
-	vm.CreateTestEvent = function() {
-		var event = {
-			'calendarId': 'primary',
-			'summary': 'Hangin with Dave',
-			'location': '1224 Washington Ave # 125, Golden, CO 80401',
-			'description': '',
-			'start': {
-				'dateTime': '2016-10-06T09:00:00',
-				'timeZone': 'America/Denver'
-
-			},
-			'end': {
-				'dateTime': '2016-10-06T17:00:00',
-				'timeZone': 'America/Denver'
-
-			}
-		}
-		googFactory.CreateEvent(event);
-	}
 
 	googFactory.registerObserverCallback(updateScope);
 
