@@ -5,6 +5,7 @@ function googFactory() {
 	var observerCallbacks = [];
 	var state = {
 		SignedIn: false,
+		UserName: '',
 		AuthChecked: false
 	}
 
@@ -82,6 +83,11 @@ function googFactory() {
 		factory.notifyObservers();
 		if (isSignedIn) {
 			loadApi();
+			// Get their name
+			var user = gapi.auth2.getAuthInstance().currentUser.get();
+			var profile = user.getBasicProfile();
+			factory.state.UserName = profile.getGivenName();
+			factory.notifyObservers();
 		}
 	}
 

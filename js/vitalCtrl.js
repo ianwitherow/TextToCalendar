@@ -4,6 +4,7 @@ angular.module('app')
 function vitalCtrl(googFactory, $timeout) {
 	var vm = this;
 	vm.SignedIn = false;
+	vm.UserName = '';
 	vm.AuthChecked = false;
 	vm.Events = [];
 	vm.ScheduleText = "";
@@ -33,6 +34,7 @@ function vitalCtrl(googFactory, $timeout) {
 		$timeout(function() {
 			vm.AuthChecked = googFactory.state.AuthChecked;
 			vm.SignedIn = googFactory.state.SignedIn;
+			vm.UserName = googFactory.state.UserName;
 		});
 	}
 
@@ -78,7 +80,8 @@ function vitalCtrl(googFactory, $timeout) {
 	}
 
 	// Adds our list of events to the Google calendar
-	vm.AddEventsToCalendar = function() {
+	vm.AddEventsToCalendar = function(e) {
+		e.preventDefault();
 		if (vm.AddingEvents) {
 			return;
 		}
