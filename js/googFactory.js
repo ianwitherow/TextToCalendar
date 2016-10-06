@@ -8,6 +8,7 @@ function googFactory() {
 		AuthChecked: false
 	}
 
+	// This is what gets returned to expose functions/properties
 	var factory = {
 		registerObserverCallback: function(callback) {
 			observerCallbacks.push(callback);
@@ -20,17 +21,12 @@ function googFactory() {
 		state: state,
 		SignIn: signIn,
 		SignOut: signOut,
-		CreateEvent: createEvent,
-		test: test
+		CreateEvent: createEvent
 	}
 
 	var apiKey = "AIzaSyDewSHjEdXzI2QZL9kmlnkyXwW85XZdI3A";
 	var clientId = "413327612065-omtvph565mocdmrs33iec0l6tqatojc8.apps.googleusercontent.com";
-	//var scopes = 'calendar';
 	var scopes = "https://www.googleapis.com/auth/calendar";
-
-	function test() {
-	}
 
 
 	function initAuth() {
@@ -59,7 +55,6 @@ function googFactory() {
 		});
 	}
 
-	gapi.load('client:auth2', initAuth);
 
 	// Load the API
 	function loadApi() {
@@ -69,6 +64,7 @@ function googFactory() {
 		});
 	}
 
+	// Create a calendar event
 	function createEvent(event, callback) {
 
 		var request = gapi.client.calendar.events.insert(event);
@@ -88,6 +84,9 @@ function googFactory() {
 			loadApi();
 		}
 	}
+
+	// Start loading the auth stuff
+	gapi.load('client:auth2', initAuth);
 
 	return factory;
 
