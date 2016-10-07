@@ -11,8 +11,8 @@ function vitalCtrl(googFactory, $scope, $timeout) {
 	vm.Month = moment().format('MM');
 	vm.Year = moment().format('YYYY');
 	vm.Finished = false;
-	vm.EventTitle = localStorage.getItem("eventTitle") || "Work at Vital Outdoors";
-		
+	vm.EventTitle = localStorage.getItem("eventTitle") || "My Generic Event";
+
 	vm.AddingEvents = false;
 	vm.Progress = 0;
 

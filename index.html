@@ -4,7 +4,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" >
-		<title>Vital Outdoors Schedule Calendarer</title>
+		<title>Text to Calendar App</title>
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/css/font-awesome-4.6.3/css/font-awesome.css">
@@ -19,7 +19,7 @@
 			</button>
 			<div class="collapse navbar-toggleable-xs" id="navbar-header">
 				<a class="navbar-brand" href="#">
-					Vital Schedule Calendar
+					Text to Calendar App
 				</a>
 				<div ng-show="vm.UserName.length > 0 && vm.SignedIn" ng-cloak>
 					<ul class="nav navbar-nav">
@@ -38,9 +38,6 @@
 				<div class="pull-xs-right">
 					<ul class="nav navbar-nav">
 						<li class="nav-item active">
-							<a href="https://github.com/ianwitherow/vital-calendar" class="nav-link" target="_blank">
-								Source code
-							</a>
 						</li>
 						<li class="nav-item active">
 							<a href="#" ng-click="vm.SignOut()" ng-show="vm.SignedIn" class="nav-link">
@@ -56,13 +53,13 @@
 
 			<div class="container" ng-cloak>
 				<h1>
-					Vital Schedule Calendar
+					Text to Calendar App
 				</h1>
 				<p ng-show="!vm.SignedIn">
-					Add your schedule to your Google Calendar!
+					Add events to your Google Calendar
 				</p>
 				<p ng-show="vm.SignedIn">
-					Copy and paste your schedule into the text box to get started.
+					Copy and paste some text into the text box to get started.
 				</p>
 				<div class="alert alert-danger" ng-show="vm.Error">
 					<a href="#" class="close" ng-click="vm.Error = null">&times;</a>
@@ -70,7 +67,7 @@
 				</div>
 				<div class="alert alert-success" ng-show="vm.Finished">
 					<a href="#" class="close" ng-click="vm.Finished = false">&times;</a>
-					Done! Your schedule should now be on your Google calendar.
+					Done! Your events should now be on your Google calendar.
 				</div>
 				<div ng-show="!vm.AuthChecked">
 					Loading...
@@ -125,7 +122,7 @@
 							</div>
 							<div class="col-sm-6">
 								<div style="margin-top: 50px;" ng-show="vm.Events.length > 0">
-									<h3>Working Days:</h3>
+									<h3>Events:</h3>
 									<ul class="list-unstyled">
 										<li ng-repeat="event in vm.Events">
 											{{ event.date }} {{ event.start }} - {{ event.end }}

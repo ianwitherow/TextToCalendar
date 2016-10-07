@@ -25,8 +25,8 @@ function googFactory() {
 		CreateEvent: createEvent
 	}
 
-	var apiKey = "AIzaSyDewSHjEdXzI2QZL9kmlnkyXwW85XZdI3A";
-	var clientId = "413327612065-omtvph565mocdmrs33iec0l6tqatojc8.apps.googleusercontent.com";
+	var apiKey = "AIzaSyAv9NvD6cj8064cT9QmlH0Nd6r-6vfa2lU";
+	var clientId = "87585843060-v22go1kjvv30m7qcbdlth7ep4p8dqp8i.apps.googleusercontent.com";
 	var scopes = "https://www.googleapis.com/auth/calendar";
 
 
