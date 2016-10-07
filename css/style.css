@@ -19,3 +19,11 @@ nav .brand-logo {
 [ng-cloak] {
 	 display: none;
 }
+
+#AddButton {
+	min-width: 288px;
+}
+
+.progress-button {
+	text-align: center;
+}

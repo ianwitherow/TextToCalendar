@@ -14,6 +14,7 @@ function vitalCtrl(googFactory, $timeout) {
 	vm.EventTitle = localStorage.getItem("eventTitle") || "Work at Vital Outdoors";
 		
 	vm.AddingEvents = false;
+	vm.Progress = 0;
 
 	var monthAndYearRegex = /(January|February|March|April|May|June|July|August|September|October|November|December)\s(\d{4})/gm;
 	var timeRegex = /^(\d{1,2}:\d{2} [A|P|a|p][M|m])-(\d{1,2}:\d{2} [A|P|a|p][M|m])/m;
@@ -82,6 +83,7 @@ function vitalCtrl(googFactory, $timeout) {
 	// Adds our list of events to the Google calendar
 	vm.AddEventsToCalendar = function(e) {
 		e.preventDefault();
+		vm.Progress = 0.1;
 		if (vm.AddingEvents) {
 			return;
 		}
@@ -111,14 +113,25 @@ function vitalCtrl(googFactory, $timeout) {
 				'end': {
 					'dateTime': endDate.format(),
 					'timeZone': 'America/Denver'
-				}
+				},
+				'index': index
 			}
 			googFactory.CreateEvent(e, function() {
 				finishedRequests++;
+				// Update progress
+				$timeout(function() {
+					vm.Progress = finishedRequests / totalRequests;
+				});
+				// Mark event as complete
+				vm.Events[e.index].complete = true;
 				if (finishedRequests >= totalRequests) {
 					$timeout(function() {
 						vm.Finished = true;
 						vm.AddingEvents = false;
+						// Reset progress to 0 after a couple seconds
+						$timeout(function() {
+							vm.Progress = 0;
+						}, 2000);
 					});
 				}
 			});
