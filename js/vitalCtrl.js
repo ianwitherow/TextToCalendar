@@ -20,7 +20,7 @@ function vitalCtrl(googFactory, $timeout) {
 
 	// Populate months
 	vm.Months = moment.months().map(function(name, index) {
-		return { value: index, name: name };
+		return { value: index + 1, name: name };
 	});
 
 	// Populate years
