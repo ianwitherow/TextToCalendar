@@ -1,2 +1,2 @@
-# Vital Calendar
-A tool for adding your schedule to your Google calendar
+# Text to Calendar
+A tool for adding things to your Google calendar
