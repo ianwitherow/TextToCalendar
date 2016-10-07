@@ -1,7 +1,7 @@
 angular.module('app')
-.controller('vitalCtrl', ['googFactory', '$timeout', vitalCtrl]);
+.controller('vitalCtrl', ['googFactory', '$scope', '$timeout', vitalCtrl]);
 
-function vitalCtrl(googFactory, $timeout) {
+function vitalCtrl(googFactory, $scope, $timeout) {
 	var vm = this;
 	vm.SignedIn = false;
 	vm.UserName = '';
@@ -32,7 +32,7 @@ function vitalCtrl(googFactory, $timeout) {
 
 	// Update scope variables when the factory values change
 	var updateScope = function() {
-		$timeout(function() {
+		$scope.$apply(function() {
 			vm.AuthChecked = googFactory.state.AuthChecked;
 			vm.SignedIn = googFactory.state.SignedIn;
 			vm.UserName = googFactory.state.UserName;
@@ -119,13 +119,13 @@ function vitalCtrl(googFactory, $timeout) {
 			googFactory.CreateEvent(e, function() {
 				finishedRequests++;
 				// Update progress
-				$timeout(function() {
+				$scope.$apply(function() {
 					vm.Progress = finishedRequests / totalRequests;
 				});
 				// Mark event as complete
 				vm.Events[e.index].complete = true;
 				if (finishedRequests >= totalRequests) {
-					$timeout(function() {
+					$scope.$apply(function() {
 						vm.Finished = true;
 						vm.AddingEvents = false;
 						// Reset progress to 0 after a couple seconds
